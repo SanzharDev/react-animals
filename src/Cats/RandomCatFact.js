@@ -13,19 +13,24 @@ const Fact = styled.div`
 `;
 
 
-function RandomCatFact() {
+function RandomCatFact(props) {
   const [catFactText, setCatFactText] = useState(null);
 
-  useEffect(() => {
+  const fetchFact = () => {
     fetch("https://cat-fact.herokuapp.com/facts/random?animal_type=cat&amount=1")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setCatFactText(data.text);
-        console.log(data);
-      });
-  }, []);
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      setCatFactText(data.text);
+    });
+  };
+
+  useEffect(() => {
+    if (props.timeLeft === props.initialTimeValue || catFactText == null) {
+      fetchFact();
+    }
+  });
 
   if (catFactText == null) return <div> Loading </div> ;
 
